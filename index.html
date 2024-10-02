@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <style>
+        body {
+            background-image: url('https://th.bing.com/th/id/R.c88b80c69141e1757cb71405f099536b?rik=iZr%2bqiUte8zN7w&pid=ImgRaw&r=0');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        @media (min-width: 768px) {
+            .form-container, .table-container {
+                flex: 0 0 48%;
+                max-width: 48%;
+            }
+            .spacer {
+                flex: 0 0 4%;
+                max-width: 4%;
+            }
+        }
+        @media (max-width: 767px) {
+            .table-container {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgSound" loop>
+        <source src="background-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container mt-5">
+        <div id="loginForm">
+            <h2 class="text-center">INICIAR SECCION</h2>
+            <form id="login">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Usuario</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            </form>
+            <p class="mt-3">¿No tienes una cuenta? <a href="#" id="showRegister">Regístrate</a></p>
+        </div>
+
+        <div id="registerForm" style="display: none;">
+            <h2 class="text-center">Registro</h2>
+            <form id="register">
+                <div class="mb-3">
+                    <label for="newUsername" class="form-label">Nuevo Usuario</label>
+                    <input type="text" class="form-control" id="newUsername" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">Nueva Contraseña</label>
+                    <input type="password" class="form-control" id="newPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+            <p class="mt-3">¿Ya tienes una cuenta? <a href="#" id="showLogin">Inicia Sesión</a></p>
+        </div>
+
+        <div id="mainContent" style="display: none;">
+            <div class="d-flex flex-wrap justify-content-center">
+                <div class="form-container">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h2>Formulario de Registro</h2>
+                        </div>
+                        <div class="card-body">
+                            <form action="insertar.php" method="POST">
+                                <div class="form-group mb-3">
+                                    <label for="nombre_completo">Nombre Completo</label>
+                                    <input type="text" class="form-control" id="nombre_completo" name="nombre_completo" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="direccion">Dirección</label>
+                                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="observacion">Observación</label>
+                                    <textarea class="form-control" id="observacion" name="observacion" rows="3" required></textarea>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="spacer"></div>
+                <div class="table-container">
+                    <h3 class="text-center">Datos Registrados</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre Completo</th>
+                                <th>Dirección</th>
+                                <th>Observación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            // Your PHP code here
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.table').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                }
+            });
+
+            $('#showRegister').click(function() {
+                $('#loginForm').hide();
+                $('#registerForm').show();
+            });
+
+            $('#showLogin').click(function() {
+                $('#registerForm').hide();
+                $('#loginForm').show();
+            });
+
+            $('#login').submit(function(e) {
+                e.preventDefault();
+                // Here you would typically send an AJAX request to verify the login
+                // For this example, we'll just show the main content
+                $('#loginForm').hide();
+                $('#mainContent').show();
+                $('#bgSound')[0].play();
+            });
+
+            $('#register').submit(function(e) {
+                e.preventDefault();
+                // Here you would typically send an AJAX request to register the user
+                // For this example, we'll just show the login form
+                $('#registerForm').hide();
+                $('#loginForm').show();
+            });
+        });
+    </script>
+</body>
+</html>
